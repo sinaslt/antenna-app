@@ -2,146 +2,146 @@
 <html lang="lt">
 <head>
 <meta charset="UTF-8">
-<title>BS Montuotojas PRO v4</title>
+<title>Netsta Azimut Point</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <style>
-/* Naudojame min-height: 100% kad geriau veiktų mobiliose narsyklese */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    background: #121212;
-    overflow: hidden;
-}
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: #121212;
+        overflow: hidden;
+    }
 
-body {
-    display: flex;
-    flex-direction: column;
-    font-family: sans-serif;
-    color: #e0e0e0;
-}
+    body {
+        display: flex;
+        flex-direction: column;
+        font-family: sans-serif;
+        color: #e0e0e0;
+    }
 
-/* Zemelapis uzima 65% arba tiek kiek lieka */
-#map {
-    height: 65vh; 
-    width: 100%;
-    flex-shrink: 0;
-}
+    #map {
+        height: 65vh; 
+        width: 100%;
+        flex-shrink: 0;
+    }
 
-/* UI dalis, kuri gali scrollinti jei netelpa */
-#ui {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 10px 10px 40px 10px; /* Daugiau vietos apacioje del banerio */
-    background: #1e1e1e;
-    border-top: 3px solid #007bff;
-    box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
-}
+    #ui {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 10px 10px 40px 10px;
+        background: #1e1e1e;
+        border-top: 3px solid #007bff;
+        box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+    }
 
-.compass-box {
-    background: #2c2c2c;
-    padding: 8px;
-    border-radius: 8px;
-    text-align: center;
-    margin-bottom: 8px;
-    border: 1px solid #444;
-    position: relative;
-}
+    .compass-box {
+        background: #2c2c2c;
+        padding: 8px;
+        border-radius: 8px;
+        text-align: center;
+        margin-bottom: 8px;
+        border: 1px solid #444;
+        position: relative;
+    }
 
-.val {
-    font-size: 1.8em;
-    font-weight: bold;
-    display: block;
-}
+    .val {
+        font-size: 1.8em;
+        font-weight: bold;
+        display: block;
+    }
 
-.az-inputs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-}
+    .az-inputs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
 
-input {
-    background: #1e1e1e;
-    color: white;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 1.1em;
-    font-weight: bold;
-    text-align: center;
-    width: 100%;
-    box-sizing: border-box;
-    border: 3px solid #555;
-}
+    input {
+        background: #1e1e1e;
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 1.1em;
+        font-weight: bold;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+        border: 3px solid #555;
+    }
 
-#az1 { border-color: #ff4444; }
-#az2 { border-color: #44ff44; }
-#az3 { border-color: #4444ff; }
-#az4 { border-color: #ffff44; }
+    #az1 { border-color: #ff4444; }
+    #az2 { border-color: #44ff44; }
+    #az3 { border-color: #4444ff; }
+    #az4 { border-color: #ffff44; }
 
-.btns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    margin-top: 8px;
-}
+    .btns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        margin-top: 8px;
+    }
 
-button {
-    border: none;
-    color: white;
-    padding: 12px;
-    border-radius: 6px;
-    font-weight: bold;
-    font-size: 0.9em;
-    cursor: pointer;
-}
+    button {
+        border: none;
+        color: white;
+        padding: 12px;
+        border-radius: 6px;
+        font-weight: bold;
+        font-size: 0.9em;
+        cursor: pointer;
+    }
 
-.btn-draw { background: #28a745; grid-column: span 2; }
-.btn-mode { background: #f39c12; }
-.btn-map { background: #6c757d; }
+    .btn-draw { background: #28a745; grid-column: span 2; }
+    .btn-mode { background: #f39c12; }
+    .btn-map { background: #6c757d; }
 
-.status-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    border: 2px solid #121212;
-}
+    .status-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        border: 2px solid #121212;
+        background: #ff4444; /* Raudona kol neveikia */
+    }
 
-.gps-active { box-shadow: 0 0 10px #00ff00; background: #00ff00; }
+    .gps-active { 
+        box-shadow: 0 0 10px #00ff00; 
+        background: #00ff00 !important; 
+    }
 
-.mode-label {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 0.7em;
-    color: #f39c12;
-    font-weight: bold;
-}
+    .mode-label {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 0.7em;
+        color: #f39c12;
+        font-weight: bold;
+    }
 
-/* Pataisytas baneris */
-.bottom-banner {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 30px;
-    background: #000;
-    color: #007bff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8em;
-    font-weight: bold;
-    letter-spacing: 1px;
-    z-index: 9999;
-    border-top: 1px solid #333;
-}
+    .bottom-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 30px;
+        background: #000;
+        color: #007bff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8em;
+        font-weight: bold;
+        letter-spacing: 1px;
+        z-index: 9999;
+        border-top: 1px solid #333;
+    }
 </style>
 </head>
 
@@ -154,14 +154,14 @@ button {
         <div id="mode-text" class="mode-label">GPS REŽIMAS</div>
         <div id="gps-status" class="status-dot"></div>
         <div style="font-size:0.75em;color:#aaa;">TELEFONO KRYPTIS</div>
-        <span id="current-deg" class="val">0°</span>
+        <span id="current-deg" class="val">Laukiama...</span>
     </div>
 
     <div class="az-inputs">
-        <input type="number" id="az1" placeholder="a">
-        <input type="number" id="az2" placeholder="b">
-        <input type="number" id="az3" placeholder="c">
-        <input type="number" id="az4" placeholder="d">
+        <input type="number" id="az1" placeholder="Sektorius 1">
+        <input type="number" id="az2" placeholder="Sektorius 2">
+        <input type="number" id="az3" placeholder="Sektorius 3">
+        <input type="number" id="az4" placeholder="Sektorius 4">
     </div>
 
     <div class="btns">
@@ -176,12 +176,17 @@ button {
 </div>
 
 <script>
+// Pradinė pozicija (Vilnius)
 var myPos = [54.6872, 25.2797];
 var sectorLines = [];
 var isManual = false;
 var currentMap = 'google';
 
-var map = L.map('map', { zoomControl: false }).setView(myPos, 18);
+// Žemėlapio inicializacija
+var map = L.map('map', { 
+    zoomControl: false,
+    tap: false // Padeda išvengti dvigubų paspaudimų mobiliuose
+}).setView(myPos, 16);
 
 var layers = {
     esri: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 }),
@@ -190,7 +195,13 @@ var layers = {
 
 layers.google.addTo(map);
 
-var myMarker = L.circleMarker(myPos, { radius: 10, color: 'white', weight: 3, fillColor: '#007bff', fillOpacity: 1 }).addTo(map);
+var myMarker = L.circleMarker(myPos, { 
+    radius: 10, 
+    color: 'white', 
+    weight: 3, 
+    fillColor: '#007bff', 
+    fillOpacity: 1 
+}).addTo(map);
 
 function setMap() {
     map.removeLayer(layers[currentMap]);
@@ -211,6 +222,7 @@ function toggleMode() {
         btn.innerHTML = "RANKINIS VALDYMAS";
         btn.style.background = "#f39c12";
         txt.innerHTML = "GPS REŽIMAS";
+        requestGPS(); // Bando vėl aktyvuoti GPS grįžus į režimą
     }
 }
 
@@ -229,15 +241,15 @@ function updateSectors() {
 
     [1, 2, 3, 4].forEach(i => {
         let val = document.getElementById('az' + i).value;
-        if (val !== "") {
+        if (val !== "" && !isNaN(val)) {
             let angle = parseFloat(val);
-            let endPoint = calculateEndPoint(myPos[0], myPos[1], angle, 400);
+            let endPoint = calculateEndPoint(myPos[0], myPos[1], angle, 500);
             let line = L.polyline([myPos, endPoint], {
                 color: colors[i - 1],
                 weight: 6,
-                opacity: 0.8
+                opacity: 0.9
             }).addTo(map);
-            line.bindTooltip(angle + "°", { permanent: true, direction: 'end' });
+            line.bindTooltip(angle + "°", { permanent: true, direction: 'end', className: 'my-labels' });
             sectorLines.push(line);
         }
     });
@@ -257,29 +269,53 @@ function calculateEndPoint(lat, lon, angle, dist) {
     return [la2 * 180 / Math.PI, lo2 * 180 / Math.PI];
 }
 
-navigator.geolocation.watchPosition(function(pos) {
-    document.getElementById('gps-status').classList.add('gps-active');
-    if (!isManual) {
-        myPos = [pos.coords.latitude, pos.coords.longitude];
-        myMarker.setLatLng(myPos);
-        map.setView(myPos, map.getZoom());
-        if (sectorLines.length > 0) updateSectors();
+// Patobulinta GPS sekimo funkcija
+function requestGPS() {
+    if ("geolocation" in navigator) {
+        navigator.geolocation.watchPosition(function(pos) {
+            document.getElementById('gps-status').classList.add('gps-active');
+            if (!isManual) {
+                myPos = [pos.coords.latitude, pos.coords.longitude];
+                myMarker.setLatLng(myPos);
+                map.setView(myPos, map.getZoom());
+                if (sectorLines.length > 0) updateSectors();
+            }
+        }, function(err) {
+            document.getElementById('gps-status').classList.remove('gps-active');
+            console.warn("GPS klaida: " + err.message);
+            // Jei tai programėlė, informuojame vartotoją
+            if(err.code === 1) {
+                alert("Prašome suteikti leidimą naudoti GPS telefono nustatymuose.");
+            }
+        }, { 
+            enableHighAccuracy: true, 
+            maximumAge: 0, 
+            timeout: 10000 
+        });
+    } else {
+        alert("GPS šiame įrenginyje nepalaikomas.");
     }
-}, function() {
-    document.getElementById('gps-status').classList.remove('gps-active');
-}, { enableHighAccuracy: true });
+}
 
-window.addEventListener("deviceorientation", function(e) {
+// Paleidžiame GPS iškart
+requestGPS();
+
+// Kompaso valdymas
+window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+window.addEventListener("deviceorientation", handleOrientation, true);
+
+function handleOrientation(e) {
     let heading;
     if (e.webkitCompassHeading) {
         heading = e.webkitCompassHeading;
     } else if (e.alpha !== null) {
         heading = 360 - e.alpha;
     }
+    
     if (heading !== undefined) {
         document.getElementById("current-deg").innerHTML = Math.round(heading) + "°";
     }
-});
+}
 </script>
 
 </body>
